@@ -28,6 +28,15 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- powershell: |
+    Write-Host "Tagging Build: $env:BuildNumber"
+
+    git tag $env:BuildNumber
+    git push origin $env:BuildNumber
+  env:
+    BuildNumber: $(Build.BuildNumber)
+  condition: succeeded()    
+
 - task: GitHubRelease@1
   inputs:
     gitHubConnection: 'github.com_MTrinkiesJr'
