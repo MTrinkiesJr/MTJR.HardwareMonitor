@@ -28,14 +28,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- powershell: |
-    Write-Host "Tagging Build: $env:BuildNumber"
 
-    git tag $env:BuildNumber
-    git push origin $env:BuildNumber
-  env:
-    BuildNumber: $(Build.BuildNumber)
-  condition: succeeded()    
 
 - task: GitHubRelease@1
   inputs:
@@ -43,8 +36,8 @@ steps:
     repositoryName: '$(Build.Repository.Name)'
     action: 'create'
     target: '$(Build.SourceVersion)'
-    tagSource: 'gitTag'
-    tagPattern: 'release-v1.*'
+    tagSource: manual
+    tag: $(Build.BuildNumber)  
     isDraft: true
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
