@@ -1,6 +1,10 @@
-[![Build Status](https://dev.azure.com/mtrinkies/MTJR/_apis/build/status/MTrinkiesJr.MTJR.HardwareMonitor?branchName=master)](https://dev.azure.com/mtrinkies/MTJR/_build/latest?definitionId=57&branchName=master)
 
 ## Monitoring Service
+| | |
+|--|--|
+Service | [![Build Status](https://dev.azure.com/mtrinkies/MTJR/_apis/build/status/MTrinkiesJr.MTJR.HardwareMonitor?branchName=master)](https://dev.azure.com/mtrinkies/MTJR/_build/latest?definitionId=57&branchName=master)|
+Docker| [![Build Status](https://dev.azure.com/mtrinkies/MTJR/_apis/build/status/MTrinkiesJr.MTJR.HardwareMonitor%20Docker?branchName=master)](https://dev.azure.com/mtrinkies/MTJR/_build/latest?definitionId=59&branchName=master)|
+
 Dieser Service bietet die Funktion Daten aus [Open Hardware Monitor](https://openhardwaremonitor.org/) auszulesen und in einer Übersicht anzuzeigen.
 
   * [Funktionsweise](#funktionsweise)
