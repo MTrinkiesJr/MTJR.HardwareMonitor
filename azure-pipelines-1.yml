@@ -1,0 +1,38 @@
+trigger:
+  branches:
+   include:
+     - master
+  paths:
+    exclude:
+      - azure-pipelines.yml
+      - azure-pipelines-docker.yml
+  
+pool: 'Own'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: Docker@2
+  displayName: "Master Image bauen"  
+  inputs:
+    containerRegistry: 'Private Registry'
+    repository: 'mtjr/hardwaremonitor'
+    command: 'build'
+    Dockerfile: '**/Dockerfile'
+    tags: |
+      latest
+      $(Build.SourceBranchName)-$(Build.BuildId)
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
+
+
+- task: Docker@2
+  displayName: "Master Image pushen"  
+  inputs:
+    containerRegistry: 'Dokcer HUB'
+    repository: 'mtjr/hardwaremonitor'
+    command: 'push'
+    tags: |
+      latest
+      $(Build.SourceBranchName)-$(Build.BuildId)
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
