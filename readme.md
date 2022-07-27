@@ -78,7 +78,7 @@ Der Service ist damit startbereit.
 ### Server konfigurieren
 Über die Seite des Service unter http://{Ip}:{Port} (http://localhost:5000) ist zunächst eine leere Liste zu sehen. Klickt man nun auf das `+` wird die Eingabemaske für einen Server angezeigt.
 
-[[images/NeuerServer.PNG|NeuerServer]]
+![NeuerServer](images/NeuerServer.PNG)
 
 Um den Server zu bearbeiten kann in der Liste auf den Namen geklickt werden.
 
@@ -87,13 +87,13 @@ Klickt man oben links auf das Zahnrad kommt man zu Oberflächen- und IoBroker-Ei
 Hier wird ebenfalls eine Liste der Verbundenen Clients angezeigt.
 Die Einstellungen sollten alle selbsterklärend sein.
 
-[[images/NeuerServer.PNG|Einstellungen]]
+![Einstellungen](images/Einstellungen.PNG)
 
 ### IoBroker
 Ist in den Einstellungen "Daten an IoBroker senden" aktiv, werden die Daten aus Open Hardware Monitor an IoBroker gesendet, wobei dies über den Adapter rest-api geschieht.
 Alle Zustände befinden sich unter `0_userdata.0.HardwareMonitor`
 
-[[images/NeuerServer.PNG|IoBroker]]
+![IoBroker](images/IoBroker.PNG)
 
 ### Docker
 Das Repo enhält eine Dockerfile, das Docker Image kann [hier](https://hub.docker.com/r/mtjr/hardwaremonitor) runtergeladen werden.
