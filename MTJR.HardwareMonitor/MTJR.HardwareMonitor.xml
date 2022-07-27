@@ -1,0 +1,1354 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MTJR.HardwareMonitor</name>
+    </assembly>
+    <members>
+        <member name="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration">
+            <summary>
+            Defines the configuration for the UI and IoBroker
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.Id">
+            <summary>
+            The ID of the configuration
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.ShowHostname">
+            <summary>
+            Defines if the hostname of the server is shown in the list
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.ShowPort">
+            <summary>
+            Defines if the port of the server is shown in the list
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.ShowInterval">
+            <summary>
+            Defines if the interval of the server is shown in the list
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.ShowCPULoad">
+            <summary>
+            Defines if the cpu load of the server is shown in the list
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.ShowCPUTemp">
+            <summary>
+            Defines if the cpu temperature of the server is shown in the list
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.ShowGPULoad">
+            <summary>
+            Defines if the gpu load of the server is shown in the list
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.ShowGPUTemp">
+            <summary>
+            Defines if the gpu temperature of the server is shown in the list
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.UseIoBroker">
+            <summary>
+            Defines if the data should be send to an IoBroker instance
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.IoBrokerHostname">
+            <summary>
+            Defines the used hostname to send data to IoBroker
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.IoBrokerPort">
+            <summary>
+            Defines the port that exposes the rest-api adapter
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.IoBrokerStates">
+            <summary>
+            Defines the sensor types that are send to IoBroker
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Configuration.HardwareMonitorConfiguration">
+            <summary>
+            Main configuration class for the service
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.HardwareMonitorConfiguration.DatabaseConnectionString">
+            <summary>
+            Connection string for <see cref="T:MTJR.HardwareMonitor.Data.DataContext"/>
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Configuration.ServerConfiguration">
+            <summary>
+            Configuration for a <see cref="T:MTJR.HardwareMonitor.Model.Server"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.ServerConfiguration.Name">
+            <summary>
+            The descriptive name of the server
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.ServerConfiguration.Hostname">
+            <summary>
+            The hostname or ip of the server running Open Hardware Monitor
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.ServerConfiguration.Port">
+            <summary>
+            The port of Hardware monitor (defaults to 8085)
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.ServerConfiguration.Interval">
+            <summary>
+            The interval the data is fetched from Open Hardware Monitor
+            also the interval the data is send to IoBroker
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration">
+            <summary>
+            Defines a configuration for an state type which is send to  IoBroker
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration.Id">
+            <summary>
+            The id id of the <see cref="T:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration.StateType">
+            <summary>
+            The state type
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration.Enabled">
+            <summary>
+            Defines if the state type should be send to IoBroker
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration.GuiConfigurationId">
+            <summary>
+            Reference id to <see cref="P:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration.GuiConfiguration"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration.GuiConfiguration">
+            <summary>
+            Reference to <see cref="P:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration.GuiConfiguration"/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration.#ctor">
+            <summary>
+            Default constructor for EntityFrameWork/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration.#ctor(MTJR.HardwareMonitor.Services.StateType,System.Boolean)">
+            <summary>
+            Constructor for creating fulfilled <see cref="T:MTJR.HardwareMonitor.Configuration.StateTypeConfiguration"/>
+            </summary>
+            <param name="stateType"></param>
+            <param name="enabled"></param>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Controller.ConfigurationController">
+            <summary>
+            API Controller for get or update <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Controller.ConfigurationController.#ctor(MTJR.HardwareMonitor.Services.ConfigurationService)">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Controller.ConfigurationController"/>
+            </summary>
+            <param name="configurationService">The configuration service to control the <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/> at runtime injected via dependency injection</param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Controller.ConfigurationController.GetConfiguration">
+            <summary>
+            Retrieves the current configuration from <see cref="T:MTJR.HardwareMonitor.Services.ConfigurationService"/>
+            </summary>
+            <returns><see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Controller.ConfigurationController.UpdateConfiguration(MTJR.HardwareMonitor.Configuration.GuiConfiguration)">
+            <summary>
+            Updates the current configuration with given <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/>
+            </summary>
+            <param name="configuration">The configuration fulfilled, the <see cref="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.Id"/> can be empty</param>
+            <returns></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Controller.ServerController">
+            <summary>
+            API Controller for CRUD operations on <see cref="T:MTJR.HardwareMonitor.Model.Server"/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Controller.ServerController.#ctor(System.IServiceProvider,Microsoft.AspNetCore.SignalR.IHubContext{MTJR.HardwareMonitor.Model.EventHub},MTJR.HardwareMonitor.Services.MonitoringService)">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Controller.ServerController"/>
+            </summary>
+            <param name="serviceProvider">Service provider to get DI container injected by DI</param>
+            <param name="hubContext">Hub context of <see cref="T:MTJR.HardwareMonitor.Model.EventHub"/></param>
+            <param name="monitoringService">Monitoring service to maintain the state of <see cref="T:MTJR.HardwareMonitor.Services.ServerMonitoringService"/></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Controller.ServerController.ServerList">
+            <summary>
+            Retrieves the current list of available <see cref="T:MTJR.HardwareMonitor.Model.Server"/>
+            </summary>
+            <returns><see>
+                    <cref>Dictionary{string,string}</cref>
+                </see>
+            </returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Controller.ServerController.ServerInfos(System.String)">
+            <summary>
+            Retrieves the sensor states for a specific <see cref="T:MTJR.HardwareMonitor.Model.Server"/> for given id
+            </summary>
+            <param name="id">The id of the <see cref="T:MTJR.HardwareMonitor.Model.Server"/></param>
+            <returns><see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Controller.ServerController.AddServer(MTJR.HardwareMonitor.Configuration.ServerConfiguration)">
+            <summary>
+            Created a new <see cref="T:MTJR.HardwareMonitor.Model.Server"/>
+            </summary>
+            <param name="configuration">The <see cref="T:MTJR.HardwareMonitor.Configuration.ServerConfiguration"/> to create an <see cref="T:MTJR.HardwareMonitor.Model.Server"/> from</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Controller.ServerController.UpdateServer(System.String,MTJR.HardwareMonitor.Configuration.ServerConfiguration)">
+            <summary>
+            Updates a <see cref="T:MTJR.HardwareMonitor.Model.Server"/> with given id and <see cref="T:MTJR.HardwareMonitor.Configuration.ServerConfiguration"/>
+            </summary>
+            <param name="id">The id of the <see cref="T:MTJR.HardwareMonitor.Model.Server"/> to update</param>
+            <param name="configuration">The <see cref="T:MTJR.HardwareMonitor.Configuration.ServerConfiguration"/> to create an <see cref="T:MTJR.HardwareMonitor.Model.Server"/> from</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Controller.ServerController.DeleteServer(System.String)">
+            <summary>
+            Deletes a <see cref="T:MTJR.HardwareMonitor.Model.Server"/> with given id
+            </summary>
+            <param name="id">The id of the <see cref="T:MTJR.HardwareMonitor.Model.Server"/> to delete</param>
+            <returns></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Data.DataContext">
+            <summary>
+            Data context to manage the database
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Data.DataContext.Servers">
+            <summary>
+            Table for <see cref="T:MTJR.HardwareMonitor.Model.Server"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Data.DataContext.GuiConfigurations">
+            <summary>
+            Table for <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Data.DataContext.StateTypeConfiguration">
+            <summary>
+            Table for <see cref="P:MTJR.HardwareMonitor.Data.DataContext.StateTypeConfiguration"/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Data.DataContext.#ctor">
+            <summary>
+            Default constructor for EntityFrameWork
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Data.DataContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{MTJR.HardwareMonitor.Data.DataContext})">
+            <summary>
+            Constructor for migration management
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Data.DataContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+            <summary>
+            Overrides the <see cref="M:MTJR.HardwareMonitor.Data.DataContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)"/> to use PostgresSql
+            </summary>
+            <param name="optionsBuilder"></param>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Data.DataContextMigrationService">
+            <summary>
+            Migration service to migrate <see cref="T:MTJR.HardwareMonitor.Data.DataContext"/> database
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Data.DataContextMigrationService.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{MTJR.HardwareMonitor.Data.DataContextMigrationService})">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Data.DataContextMigrationService"/>
+            </summary>
+            <param name="serviceProvider">Service provider to load required services</param>
+            <param name="logger">Logger for <see cref="T:MTJR.HardwareMonitor.Data.DataContextMigrationService"/></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Data.DataContextMigrationService.ExecuteAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Extensions.StringExtensions">
+            <summary>
+            Extensions for <see cref="T:System.String"/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Extensions.StringExtensions.GetHardwareType(System.String,MTJR.HardwareMonitor.Model.HardwareInfo)">
+            <summary>
+            Resolves the <see cref="T:MTJR.HardwareMonitor.Model.HardwareType"/> by given image path
+            </summary>
+            <param name="imagePath">The image path given by Open Hardware Monitor</param>
+            <param name="parent">The parent to inherit the<see cref="T:MTJR.HardwareMonitor.Model.HardwareType"/> when <see cref="T:MTJR.HardwareMonitor.Model.HardwareType"/> is 'HardwareType.Transparent'</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Extensions.StringExtensions.GetValueType(System.String,MTJR.HardwareMonitor.Model.HardwareInfo)">
+            <summary>
+            Resolves the <see cref="T:MTJR.HardwareMonitor.Model.ValueType"/> by given image path
+            </summary>
+            <param name="imagePath">The image path given by Open Hardware Monitor</param>
+            <param name="parent">The parent to inherit the<see cref="T:MTJR.HardwareMonitor.Model.HardwareType"/> when <see cref="T:MTJR.HardwareMonitor.Model.HardwareType"/> is 'HardwareType.Transparent'</param>
+            <returns></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Migrations.InitialCreate">
+            <inheritdoc />
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Migrations.AddedGuiConfiguration">
+            <inheritdoc />
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.AddedGuiConfiguration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.AddedGuiConfiguration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.AddedGuiConfiguration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Migrations.UpdatedGuiConfiguration">
+            <inheritdoc />
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.UpdatedGuiConfiguration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.UpdatedGuiConfiguration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.UpdatedGuiConfiguration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Migrations.UpdatedGuiConfiguration_IoBrokerStates">
+            <inheritdoc />
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.UpdatedGuiConfiguration_IoBrokerStates.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.UpdatedGuiConfiguration_IoBrokerStates.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Migrations.UpdatedGuiConfiguration_IoBrokerStates.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.EventHub">
+            <inheritdoc/>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.EventHub.#ctor(MTJR.HardwareMonitor.Services.EventService)">
+            <inheritdoc/>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.EventHub.OnConnectedAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.EventHub.OnDisconnectedAsync(System.Exception)">
+            <inheritdoc/>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.EventHubConnection">
+            <summary>
+            Describes a connection to <see cref="T:MTJR.HardwareMonitor.Model.EventHub"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.EventHubConnection.ConnectionId">
+            <summary>
+            The connection id of the connected client
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.EventHubConnection.IpAddress">
+            <summary>
+            The ip address of the connected client
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.EventHubConnection.ConnectedSince">
+            <summary>
+            The connection time of the client
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.EventHubConnection.#ctor(System.String,System.String)">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Model.EventHubConnection"/>
+            </summary>
+            <param name="connectionId">Connection id</param>
+            <param name="ipAddress">IP Address</param>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.HardwareInfo">
+            <summary>
+            Model to reflect received data from Open Hardware Monitor 
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.Id">
+            <summary>
+            The specified id of this <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.Text">
+            <summary>
+            The name like text
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.ResolvedText">
+            <summary>
+            Some <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Text"/> names are different to defaults, this property equalizes the name
+            At the moment only captured on core temperatures
+            eg. Some processors expose 'CPU Package' which is the default
+            Some others expose like 'Core #1 - #8'
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.Children">
+            <summary>
+            Child <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/> 
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.CompleteName">
+            <summary>
+            Resolved complete path 
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.ValueUnit">
+            <summary>
+            Extracted unit from the value
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.Min">
+            <summary>
+            Minimum value
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.ParsedMin">
+            <summary>
+            Parsed <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Min"/> value as <see cref="T:System.Double"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.Value">
+            <summary>
+            The current value
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.ParsedValue">
+            <summary>
+            Parsed <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Value"/> as <see cref="T:System.Double"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.Max">
+            <summary>
+            Maximum value
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.ParsedMax">
+            <summary>
+            Parsed <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Max"/> as <see cref="T:System.Double"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.ImageUrl">
+            <summary>
+            URL to displayed image (referenced from open Hardware Monitor)
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.Parent">
+            <summary>
+            The resolved parent <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType">
+            <summary>
+            Resolved <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> by <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ImageUrl"/>
+            Some <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ImageUrl"/> of value 'HardwareType.Transparent/> inherit the <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> from <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Parent"/> 
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.ValueType">
+            <summary>
+            Resolved <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ValueType"/> by <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ImageUrl"/>
+            Some <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ImageUrl"/> of value 'HardwareType.Transparent/> inherit the <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> from <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Parent"/> 
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.HardwareInfo.ResolveParents(System.String)">
+            <summary>
+            Resolves the parents for each <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Children"/> recursive
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.HardwareInfo.ResolveName">
+            <summary>
+            Resolves the complete path with <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Text"/> recursive
+            </summary>
+            <returns><see cref="T:System.String"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.HardwareInfo.ParseValue(System.String)">
+            <summary>
+            Parses the retrieved value to <see cref="T:System.Double"/>
+            </summary>
+            <param name="value">The value from <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Value"/>, <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Min"/> or <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Max"/></param>
+            <returns><see cref="T:System.Double"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.HardwareInfo.GetChildrenFlat">
+            <summary>
+            Retrieves a flat list of all <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/>
+            </summary>
+            <returns><see cref="T:System.Collections.Generic.List`1"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.HardwareInfo.FindByName(System.String,MTJR.HardwareMonitor.Model.HardwareType,MTJR.HardwareMonitor.Model.ValueType)">
+            <summary>
+            Retrieves a <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/> by its nam and optional <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/>
+            </summary>
+            <param name="name">The name of the <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/></param>
+            <param name="hardwareType">The <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> of the <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/></param>
+            <param name="valueType">The <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ValueType"/> of the <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/></param>
+            <returns><see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.HardwareInfo.FindInfoByNestedType(MTJR.HardwareMonitor.Model.HardwareType,MTJR.HardwareMonitor.Model.ValueType)">
+            <summary>
+            Searches for <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/> with given parent <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> and value <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/>
+            </summary>
+            <param name="parentType">The <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> of the <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Parent"/> should be</param>
+            <param name="valueType">The <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> the <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/> should be</param>
+            <returns><see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.HardwareInfo.GetChildrenOfType(MTJR.HardwareMonitor.Model.ValueType)">
+            <summary>
+            Retrieves the children of give <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/>
+            </summary>
+            <param name="type">the <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> the children should be</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Model.HardwareInfo.FindInfosByNestedType(MTJR.HardwareMonitor.Model.HardwareType,MTJR.HardwareMonitor.Model.ValueType)">
+            <summary>
+            Searches for multiple <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/> with given parent <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> and value <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ValueType"/>
+            </summary>
+            <param name="parentType">The <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> of the <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Parent"/> should be</param>
+            <param name="valueType">The <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ValueType"/> the <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/> should be</param>
+            <returns><see cref="T:System.Collections.Generic.List`1"/></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.HardwareType">
+            <summary>
+            Defined hardware types from Open hardware Monitor
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.HardwareType.None">
+            <summary>
+            The hardware type is not specified or cannot be resolved
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Root">
+            <summary>
+            The root of all data received
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Mainboard">
+            <summary>
+            Defines a mainboard
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Cpu">
+            <summary>
+            Defines a CPU
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Ram">
+            <summary>
+            Defines a memory module
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Nvidia">
+            <summary>
+            Defines a GPU, nvidia graphics card in specific
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Hdd">
+            <summary>
+            Defines a HDD
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Computer">
+            <summary>
+            Defines a computer
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Chip">
+            <summary>
+            Defines a chip
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.IoBrokerState">
+            <summary>
+            Describes a state for IoBroker
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerState.Type">
+            <summary>
+            The actual type of the state used values are 'device' and 'state'
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerState.Common">
+            <summary>
+            Describes common values for this <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerState.Id">
+            <summary>
+            The id of this <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/>
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.IoBrokerStateCommon">
+            <summary>
+            Describes common properties for <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerStateCommon.Name">
+            <summary>
+            The descriptive name of the state
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerStateCommon.Type">
+            <summary>
+            The value type of the <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/> used values are 'string' and 'number'
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerStateCommon.Unit">
+            <summary>
+            The value type of see <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerStateCommon.Read">
+            <summary>
+            Defines if the <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/> could be read
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerStateCommon.Write">
+            <summary>
+            Defines if the <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/> could by written
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerStateCommon.Role">
+            <summary>
+            The role the <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/> is visible to
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerStateCommon.Min">
+            <summary>
+            The minimum value of <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerStateCommon.Max">
+            <summary>
+            The maximum value of <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/>
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.IoBrokerStateValue">
+            <summary>
+            Describes the value for a <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerStateValue.Val">
+            <summary>
+            The actual value
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.IoBrokerStateValue.Ack">
+            <summary>
+            Defines if the value ich acknowledged
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.Server">
+            <summary>
+            Describes a server which is running Open Hardware Monitor
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.Server.Id">
+            <summary>
+            The object id
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.Server.Name">
+            <summary>
+            The descriptive name of the server
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.Server.Hostname">
+            <summary>
+            The hostname or IP of Open Hardware Monitor
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.Server.Port">
+            <summary>
+            The port of Open Hardware Monitor (defaults to 8085)
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.Server.Interval">
+            <summary>
+            The interval the data is fetched from Open Hardware Monitor
+            also the interval to send data to IoBroker
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.Server.LastSuccess">
+            <summary>
+            The <see cref="T:System.DateTime"/> of the last succeeded data fetch
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.Server.LastFailure">
+            <summary>
+            The <see cref="T:System.DateTime"/> of the last failed data fetch
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.ValueType">
+            <summary>
+            Defined value types from Open hardware Monitor
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.ValueType.None">
+            <summary>
+            The value type is not specified or cannot be resolved
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.ValueType.Voltage">
+            <summary>
+            Defines a voltage 
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.ValueType.Temperature">
+            <summary>
+            Defines a temperature
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.ValueType.Control">
+            <summary>
+            Defines a control (often a fan control)
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.ValueType.Clock">
+            <summary>
+            Defines a clock speed
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.ValueType.Load">
+            <summary>
+            Defines a load
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.ValueType.Power">
+            <summary>
+            Defines power
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.ValueType.Ram">
+            <summary>
+            Defines a CPU
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.ValueType.Fan">
+            <summary>
+            Defines a GPU, nvidia graphics card in specific
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Pages.ErrorModel">
+            <summary>
+            Model for providing an error page
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Pages.ErrorModel.RequestId">
+            <summary>
+            The captured request id
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Pages.ErrorModel.ShowRequestId">
+            <summary>
+            Defines if the <see cref="P:MTJR.HardwareMonitor.Pages.ErrorModel.RequestId"/> will be shown
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.ErrorModel.#ctor(Microsoft.Extensions.Logging.ILogger{MTJR.HardwareMonitor.Pages.ErrorModel})">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Pages.ErrorModel"/>
+            </summary>
+            <param name="logger">The logger for <see cref="T:MTJR.HardwareMonitor.Pages.ErrorModel"/></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.ErrorModel.OnGet">
+            <summary>
+            Retrieved the page with request id
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Pages.IndexModel">
+            <summary>
+            Model class for the index page
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Pages.IndexModel.CurrentView">
+            <summary>
+            Describes the current displayed sub page
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.IndexModel.#ctor(Microsoft.Extensions.Logging.ILogger{MTJR.HardwareMonitor.Pages.IndexModel})">
+            <summary>
+            Constructor to create the <see cref="T:MTJR.HardwareMonitor.Pages.IndexModel"/>
+            </summary>
+            <param name="logger">Logger injected by DI</param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.IndexModel.OnGetList">
+            <summary>
+            Invokes to get the list view for the items
+            </summary>
+            <returns>The result view of <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponent"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.IndexModel.OnGetEdit(System.String)">
+            <summary>
+            Invokes to get the edit view for specified item id
+            </summary>
+            <param name="id">The id of the item to show the edit view</param>
+            <returns>The result view of <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponent"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.IndexModel.OnGetSettings">
+            <summary>
+            Invokes to get the settings view
+            </summary>
+            <returns>The result view of <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponent"/></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Pages.PrivacyModel">
+            <summary>
+            Model for providing an privacy page
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.PrivacyModel.#ctor(Microsoft.Extensions.Logging.ILogger{MTJR.HardwareMonitor.Pages.PrivacyModel})">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Pages.PrivacyModel"/>
+            </summary>
+            <param name="logger">The logger for <see cref="T:MTJR.HardwareMonitor.Pages.PrivacyModel"/></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.PrivacyModel.OnGet">
+            <summary>
+            Retrieves the page
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponent">
+            <summary>
+            Sub page for editing or viewing a server
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponent.#ctor(MTJR.HardwareMonitor.Services.MonitoringService)">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponent"/>
+            </summary>
+            <param name="monitoringService"><see cref="T:MTJR.HardwareMonitor.Services.MonitoringService"/> to provide server list</param> 
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponent.InvokeAsync(System.String)">
+            <summary>
+            Invokes the <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponentModel"/>
+            </summary>
+            <param name="id">The id of the server to edit to view</param>
+            <returns><see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponentModel">
+            <summary>
+            The model to provide the <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponent"/> sub page
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponentModel.ServerService">
+            <summary>
+            The <see cref="T:MTJR.HardwareMonitor.Services.ServerMonitoringService"/> which holds the requested <see cref="T:MTJR.HardwareMonitor.Model.Server"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponentModel.Creating">
+            <summary>
+            Defines if the page is started to create a new server
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponentModel.#ctor(System.String,System.Collections.Generic.List{MTJR.HardwareMonitor.Services.ServerMonitoringService})">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.EditView.EditViewViewComponentModel"/>
+            </summary>
+            <param name="id">The id of the server</param>
+            <param name="server">The list of all servers</param>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponent">
+            <summary>
+            Sub page to list servers
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponent.#ctor(MTJR.HardwareMonitor.Services.MonitoringService,MTJR.HardwareMonitor.Services.ConfigurationService)">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponent"/>
+            </summary>
+            <param name="monitoringService"><see cref="T:MTJR.HardwareMonitor.Services.MonitoringService"/> to provide current server list</param>
+            <param name="configurationService"><see cref="T:MTJR.HardwareMonitor.Services.ConfigurationService"/> to provide <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponent.InvokeAsync">
+            <summary>
+            Invokes the <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponentModel"/>
+            </summary>
+            <returns><see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponentModel">
+            <summary>
+            The model to provide the <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponent"/> sub page
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponentModel.Server">
+            <summary>
+            The list of servers
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponentModel.GuiConfiguration">
+            <summary>
+            The <see cref="P:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponentModel.GuiConfiguration"/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponentModel.#ctor(System.Collections.Generic.List{MTJR.HardwareMonitor.Services.ServerMonitoringService},MTJR.HardwareMonitor.Services.ConfigurationService)">
+            <summary>
+            Constructor to provide fulfilled <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponentModel"/>
+            </summary>
+            <param name="server">The <see cref="T:System.Collections.Generic.List`1"/></param>
+            <param name="configurationService">The <see cref="P:MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponentModel.GuiConfiguration"/></param>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponent">
+            <summary>
+            Sub page to edit <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponent.#ctor(MTJR.HardwareMonitor.Services.ConfigurationService,MTJR.HardwareMonitor.Services.EventService)">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponent"/>
+            </summary>
+            <param name="configurationService">The <see cref="T:MTJR.HardwareMonitor.Services.ConfigurationService"/></param>
+            <param name="eventService">The <see cref="T:MTJR.HardwareMonitor.Services.EventService"/></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponent.InvokeAsync">
+            <summary>
+            Invokes the <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponentModel"/>
+            </summary>
+            <returns><see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponentModel">
+            <summary>
+            The model to provide the <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponent"/> sub page
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponentModel.Configuration">
+            <summary>
+            The current <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/> provided by <see cref="T:MTJR.HardwareMonitor.Services.ConfigurationService"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponentModel.EventService">
+            <summary>
+            The current <see cref="P:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponentModel.EventService"/> to get current <see cref="T:MTJR.HardwareMonitor.Model.EventHubConnection"/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponentModel.#ctor(MTJR.HardwareMonitor.Services.ConfigurationService,MTJR.HardwareMonitor.Services.EventService)">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponentModel"/>
+            </summary>
+            <param name="configurationService">The <see cref="T:MTJR.HardwareMonitor.Services.ConfigurationService"/></param>
+            <param name="eventService">The <see cref="P:MTJR.HardwareMonitor.Pages.Shared.Components.SettingsView.SettingsViewViewComponentModel.EventService"/></param>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Program">
+            <summary>
+            Main entry class for the service
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Program.Main(System.String[])">
+            <summary>
+            Main entry point for the service
+            Starts the <see cref="T:Microsoft.Extensions.Hosting.IHost"/>
+            </summary>
+            <param name="args">Optional arguments to start the service with</param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            Creates the <see cref="T:Microsoft.Extensions.Hosting.IHost"/> for the service
+            </summary>
+            <param name="args">Optional arguments to start the service with</param>
+            <returns><see cref="T:Microsoft.Extensions.Hosting.IHostBuilder"/></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Services.ConfigurationService">
+            <summary>
+            Service to provide <see cref="P:MTJR.HardwareMonitor.Services.ConfigurationService.GuiConfiguration"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.ConfigurationService.GuiConfiguration">
+            <summary>
+            Current available <see cref="P:MTJR.HardwareMonitor.Services.ConfigurationService.GuiConfiguration"/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ConfigurationService.#ctor(System.IServiceProvider)">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Services.ConfigurationService"/>
+            </summary>
+            <param name="serviceProvider"></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ConfigurationService.UpdateAsync(MTJR.HardwareMonitor.Configuration.GuiConfiguration)">
+            <summary>
+            Updates the current <see cref="P:MTJR.HardwareMonitor.Services.ConfigurationService.GuiConfiguration"/>
+            </summary>
+            <param name="configuration">The <see cref="P:MTJR.HardwareMonitor.Services.ConfigurationService.GuiConfiguration"/> to update</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ConfigurationService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts the <see cref="T:Microsoft.Extensions.Hosting.IHostedService"/>
+            </summary>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to stop async operations</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ConfigurationService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops the <see cref="T:Microsoft.Extensions.Hosting.IHostedService"/>
+            </summary>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to stop async operations</param>
+            <returns></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Services.EventService">
+            <summary>
+            Service to capture connected clients
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.EventService.Connections">
+            <summary>
+            The current list of <see cref="T:MTJR.HardwareMonitor.Model.EventHubConnection"/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.EventService.#ctor(System.Collections.Generic.List{MTJR.HardwareMonitor.Model.EventHubConnection},Microsoft.AspNetCore.SignalR.IHubContext{MTJR.HardwareMonitor.Model.EventHub})">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Services.EventService"/>
+            </summary>
+            <param name="connections">Injected list of connections</param>
+            <param name="hubContext">The hub context of <see cref="T:MTJR.HardwareMonitor.Model.EventHub"/></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.EventService.AddAsync(System.String,System.String)">
+            <summary>
+            Add or update a connection
+            </summary>
+            <param name="connectionId">ConnectionId of the client</param>
+            <param name="ipAddress">IP Address of the client</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.EventService.RemoveAsync(System.String)">
+            <summary>
+            Removes an existing connection
+            </summary>
+            <param name="connectionId">The connection id of disconnected client</param>
+            <returns></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Services.StateType">
+            <summary>
+            Defines a type to send data to Iobroker
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.CPU_Clock">
+            <summary>
+            Clocks of the CPU
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.CPU_Power">
+            <summary>
+            Powers of the CPU
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.CPU_Load">
+            <summary>
+            Loads of the CPU
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.CPU_Temperature">
+            <summary>
+            Temperatures of the CPU
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.GPU_Clock">
+            <summary>
+            Clocks of the GPU
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.GPU_Power">
+            <summary>
+            Powers of the GPU
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.GPU_Load">
+            <summary>
+            Loads of the GPU
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.GPU_Data">
+            <summary>
+            Datas of the GPU
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.GPU_Temperature">
+            <summary>
+            Temperatures of the GPU
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.RAM_Load">
+            <summary>
+            Load of the memory
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.RAM_Data">
+            <summary>
+            Data of the memory
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.HDD_Temperature">
+            <summary>
+            Temperatures of the HDDs
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.HDD_Load">
+            <summary>
+            Loads of of the HDDs
+            May not be available for all
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.HDD_Data">
+            <summary>
+            Data of the HDDs
+            May not be available for all
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Services.IoBrokerApiService">
+            <summary>
+            Service to provide function to send data to IoBroker
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.#ctor(MTJR.HardwareMonitor.Services.ConfigurationService)">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Services.IoBrokerApiService"/>
+            </summary>
+            <param name="configurationService"><see cref="T:MTJR.HardwareMonitor.Services.ConfigurationService"/> to get the current <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.UpdateStatesAsync(System.String,System.String,MTJR.HardwareMonitor.Model.HardwareInfo)">
+            <summary>
+            Update all states for a <see cref="T:MTJR.HardwareMonitor.Model.Server"/>
+            </summary>
+            <param name="itemId">The server id</param>
+            <param name="itemName">The server name</param>
+            <param name="info">The current <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/> of the <see cref="T:MTJR.HardwareMonitor.Model.Server"/></param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.CreateObjectAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            Ensures the base path of an <see cref="T:MTJR.HardwareMonitor.Model.Server"/>
+            all server instances will be created at "0_userdata.0.HardwareMonitor"
+            </summary>
+            <param name="itemId">The id of the <see cref="T:MTJR.HardwareMonitor.Model.Server"/></param>
+            <param name="itemName">The name of the <see cref="T:MTJR.HardwareMonitor.Model.Server"/></param>
+            <param name="objectType">The type of the added object</param>
+            <param name="valueType">The type of the state value</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.AddStatesAsync(System.String,System.String,System.Collections.Generic.List{MTJR.HardwareMonitor.Model.HardwareInfo},MTJR.HardwareMonitor.Services.StateType)">
+            <summary>
+            Add states for given server
+            </summary>
+            <param name="serverId">The database id of the <see cref="T:MTJR.HardwareMonitor.Model.Server"/></param>
+            <param name="serverName">The <see cref="T:MTJR.HardwareMonitor.Model.Server"/> name</param>
+            <param name="infos">The resolved <inheritdoc cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/> list of given <see cref="T:MTJR.HardwareMonitor.Services.StateType"/></param>
+            <param name="stateType">The <see cref="T:MTJR.HardwareMonitor.Services.StateType"/> for resolved <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/>'s</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.UpdateStateAsync(System.String,System.Object)">
+            <summary>
+            Updates value of a <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/>
+            </summary>
+            <param name="stateId">The id of the <see cref="T:MTJR.HardwareMonitor.Model.IoBrokerState"/></param>
+            <param name="value">The value to be set</param>
+            <returns><see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Services.MonitoringService">
+            <summary>
+            Service to maintain the state of <see cref="T:MTJR.HardwareMonitor.Services.ServerMonitoringService"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.MonitoringService.Servers">
+            <summary>
+            List of all available servers
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.MonitoringService.#ctor(System.IServiceProvider)">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Services.MonitoringService"/>
+            </summary>
+            <param name="serviceProvider"><see cref="T:System.IServiceProvider"/> to get required services</param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.MonitoringService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts the <see cref="T:Microsoft.Extensions.Hosting.IHostedService"/> and fetches the current <see cref="T:MTJR.HardwareMonitor.Model.Server"/> from <see cref="T:MTJR.HardwareMonitor.Data.DataContext"/>
+            </summary>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to cancel async operations</param>
+            <returns><see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.MonitoringService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops the service and clears als available <see cref="T:MTJR.HardwareMonitor.Services.ServerMonitoringService"/>
+            </summary>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to cancel async operations</param>
+            <returns><see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Services.State">
+            <summary>
+            Available state for the <see cref="T:MTJR.HardwareMonitor.Model.Server"/> and Open Hardware Monitor
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.State.Offline">
+            <summary>
+            The server or Open Hardware monitor is unreachable
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Services.State.Online">
+            <summary>
+            The server or Open Hardware monitor is reachable
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Services.ServerMonitoringService">
+            <summary>
+            Service to monitor Open Hardware Monitor
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.Server">
+            <summary>
+            The <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.Server"/> reference from <see cref="T:MTJR.HardwareMonitor.Data.DataContext"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.Timer">
+            <summary>
+            Timer to periodically fetch data from Open Hardware Monitor
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.State">
+            <summary>
+            The current state of the server itself
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.OhmState">
+            <summary>
+            The current state of Open Hardware Monitor connectivity
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.HardwareInfo">
+            <summary>
+            The current fetched <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.HardwareInfo"/> from Open Hardware Monitor
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.CpuTemp">
+            <summary>
+            Current resolved cpu temperature with unit
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.CpuLoad">
+            <summary>
+            Current resolved cpu load with unit
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.GpuTemp">
+            <summary>
+            Current resolved gpu temperature with unit
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.GpuLoad">
+            <summary>
+            Current resolved gpu load with unit
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ServerMonitoringService.#ctor">
+            <summary>
+            Constructor to create a new <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.Server"/>
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ServerMonitoringService.#ctor(System.String,System.IServiceProvider,Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)">
+            <summary>
+            Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Services.ServerMonitoringService"/> from existing <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.Server"/>
+            </summary>
+            <param name="id"></param>
+            <param name="serviceProvider"></param>
+            <param name="scopeFactory"></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ServerMonitoringService.Init(System.String)">
+            <summary>
+            Initialized the <see cref="T:MTJR.HardwareMonitor.Services.ServerMonitoringService"/> from existing <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.Server"/>
+            </summary>
+            <param name="id">The id of the server</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ServerMonitoringService.TimerOnElapsed(System.Object,System.Timers.ElapsedEventArgs)">
+            <summary>
+            Elapsed every Interval
+            </summary>
+            <param name="sender">The sender of the event</param>
+            <param name="e">Arguments passed to the event</param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ServerMonitoringService.GetInfoAsync">
+            <summary>
+            Fetches the current <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.HardwareInfo"/> from Open Hardware Monitor
+            </summary>
+            <returns><see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ServerMonitoringService.SendEventForHardware(System.String,MTJR.HardwareMonitor.Model.HardwareType,MTJR.HardwareMonitor.Model.ValueType)">
+            <summary>
+            Send event for current <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.CpuLoad"/>, <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.CpuTemp"/>, <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.GpuLoad"/> and <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.GpuTemp"/>
+            </summary>
+            <param name="name">The name of the <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.HardwareInfo"/></param>
+            <param name="eventName">The name of the event to send</param>
+            <param name="hardwareType">The <see cref="T:MTJR.HardwareMonitor.Model.HardwareType"/> to find the correct <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.HardwareInfo"/></param>
+            <param name="valueType">The <see cref="T:MTJR.HardwareMonitor.Model.ValueType"/> to find the correct <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.HardwareInfo"/></param>
+            <returns><see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ServerMonitoringService.UpdateDatabaseAsync">
+            <summary>
+            Updates the database entry for current <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.Server"/>
+            </summary>
+            <returns><see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ServerMonitoringService.CheckStatusAsync">
+            <summary>
+            Send a ping to the server to check the availability
+            </summary>
+            <returns><see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.ServerMonitoringService.UpdateAsync(MTJR.HardwareMonitor.Configuration.ServerConfiguration)">
+            <summary>
+            Update the current <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.Server"/> from given <see cref="T:MTJR.HardwareMonitor.Configuration.ServerConfiguration"/>
+            </summary>
+            <param name="request">The <see cref="T:MTJR.HardwareMonitor.Configuration.ServerConfiguration"/></param>
+            <returns><see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Startup">
+            <summary>
+            Startup class for the service
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Construcutor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Startup"/> initialized by <see cref="T:Microsoft.AspNetCore.Hosting.WebHostBuilder"/>
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Startup.Configuration">
+            <summary>
+            Loaded configuration
+            </summary>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Initializes necessary services
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Configures injected services
+            </summary>
+            <param name="app">Application builder</param>
+            <param name="env">Loaded environment</param>
+        </member>
+    </members>
+</doc>

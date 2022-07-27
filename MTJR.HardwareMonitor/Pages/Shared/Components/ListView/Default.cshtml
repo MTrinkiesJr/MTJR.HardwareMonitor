@@ -1,0 +1,192 @@
+﻿@using MTJR.HardwareMonitor.Services
+@model MTJR.HardwareMonitor.Pages.Shared.Components.ListView.ListViewViewComponentModel
+
+<table class="table" id="itemList">
+    <thead>
+        <tr>
+            <th scope="col" class="text-center" style="width: 50px;">Status</th>
+            <th scope="col" class="text-center" style="width: 50px;">OHM Status</th>
+            <th scope="col">Name</th>
+            @if (Model.GuiConfiguration.ShowHostname)
+            {
+                <th scope="col">Hostname</th>
+            }
+            @if (Model.GuiConfiguration.ShowPort)
+            {
+                <th scope="col">Port</th>
+            }
+            @if (Model.GuiConfiguration.ShowInterval)
+            {
+                <th scope="col">Interval</th>
+            }
+            @if (Model.GuiConfiguration.ShowCPULoad)
+            {
+                <th scope="col">CPU Load</th>
+            }
+            @if (Model.GuiConfiguration.ShowCPUTemp)
+            {
+                <th scope="col">CPU Temp</th>
+            }
+            @if (Model.GuiConfiguration.ShowGPULoad)
+            {
+                <th scope="col">GPU Load</th>
+            }
+            @if (Model.GuiConfiguration.ShowGPUTemp)
+            {
+                <th scope="col">GPU Temp</th>
+            }
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody id="listColumns">
+
+        @{
+            @for (var i = 0; i < Model.Server.Count; i++)
+            {
+                var server = Model.Server[i];
+                <tr id="tr_@server.Server.Id">
+                    <td id="state_@server.Server.Id">
+                        @if (server.State == State.Online)
+                        {
+                            <div class="circle" style="background: green; color: transparent;" title="@server.State">@server.State</div>
+                        }
+                        else
+                        {
+                            <div class="circle" style="background: red; color: transparent;" title="@server.State">@server.State</div>
+                        }
+                    </td>
+                    <td id="ohmstate_@server.Server.Id">
+                        @if (server.OhmState == State.Online)
+                        {
+                            <div class="circle" style="background: green; color: transparent;" title="@server.OhmState">@server.OhmState</div>
+                        }
+                        else
+                        {
+                            <div class="circle" style="background: red; color: transparent;" title="@server.OhmState">@server.OhmState</div>
+                        }
+                    </td>
+                    <td id="name_@server.Server.Id" class="name_ref name_link" style="color: blue; text-underline: blue">@server.Server.Name</td>
+                    @if (Model.GuiConfiguration.ShowHostname)
+                    {
+                        <td id="host_@server.Server.Id">@server.Server.Hostname</td>
+                    }
+                    @if (Model.GuiConfiguration.ShowPort)
+                    {
+                        <td id="port_@server.Server.Id">@server.Server.Port</td>
+                    }
+                    @if (Model.GuiConfiguration.ShowInterval)
+                    {
+                        <td id="interval_@server.Server.Id">@(server.Server.Interval / 1000) s</td>
+                    }
+                    @if (Model.GuiConfiguration.ShowCPULoad)
+                    {
+                        <td id="cpu_load_@server.Server.Id">@server.CpuLoad</td>
+                    }
+                    @if (Model.GuiConfiguration.ShowCPUTemp)
+                    {
+                        <td id="cpu_temp_@server.Server.Id">@server.CpuTemp</td>
+                    }
+                    @if (Model.GuiConfiguration.ShowGPULoad)
+                    {
+                        <td id="gpu_load_@server.Server.Id">@server.GpuLoad</td>
+                    }
+                    @if (Model.GuiConfiguration.ShowGPUTemp)
+                    {
+                        <td id="gpu_temp_@server.Server.Id">@server.GpuTemp</td>
+                    }
+                    <td><img class="btn_delete" title="@server.Server.Name" alt="@server.Server.Id" img src="img/trash.png" width="32" height="32" /></td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
+<img id="btn_add" src="img/add.png" width="48" height="48" style="float: right;" />
+
+<script src="lib/datatables.min.js"></script>
+<script src="lib/jquery-confirm.min.js"></script>
+<link rel="stylesheet" href="css/datatables.min.css">
+<link rel="stylesheet" href="css/jquery-confirm.min.css">
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('#itemList').DataTable({
+            "language": {
+                "lengthMenu": " _MENU_ Einträge pro Seite",
+                "zeroRecords": "Keine Einträge",
+                "info": "Seite _PAGE_ von _PAGES_",
+                "infoEmpty": "Keine Einträge",
+                "infoFiltered": "(Gefiltert aus _MAX_ Einträgen)",
+                "search": "Filter",
+                "emptyTable": "Keine Einträge",
+                "paginate": {
+                    "first": "<<",
+                    "last": ">>",
+                    "next": ">",
+                    "previous": "<"
+                },
+            }
+        });
+
+        $('#btn_add').on('click', function () {
+            $.get("Index?handler=Edit&id=tr_create", function (data) {
+                $("#content").html(data);
+            })
+                .fail(function () {
+                    $("#content").html("Failed to load create item");
+                });
+        });
+
+        $('.btn_delete').on('click', function () {
+            var btn = $(this);
+            $.confirm({
+                title: 'Sind Sie sicher "' + btn.attr('title') + '" zu löschen?',
+                content: '',
+                buttons: {
+                    confirm: {
+                        text: 'Ja',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function () {
+                            var req = $.ajax({
+                                url: "/server/" + btn.attr('alt'),
+                                type: "DELETE",
+                                contentType: "application/json; charset=utf-8"
+                            });
+                            req.done(function () {
+                                table
+                                    .row(btn.parents('tr'))
+                                    .remove()
+                                    .draw();
+                            });
+                            req.fail(function () {
+                                $.alert({
+                                    title: 'Fehler beim löschen von "' + btn.attr('title') + '"'
+                                });
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'Nein',
+                        btnClass: 'btn-red',
+                        keys: ['esc'],
+                        action: function () {
+                        }
+                    }
+                }
+            });
+        });
+
+
+    });
+    $('.name_ref').click(function () {
+        var id = $(this).parent().attr('id');
+        $.get("Index?handler=Edit&id=" + id, function (data) {
+            $("#content").html(data);
+        })
+            .fail(function () {
+                $("#content").html("Failed to load item");
+            });
+    });
+</script>

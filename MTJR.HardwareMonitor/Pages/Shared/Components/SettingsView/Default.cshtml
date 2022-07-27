@@ -1,0 +1,251 @@
+﻿@model SettingsViewViewComponentModel
+
+
+<div class="h-100">
+    <input id="btn_back" type="button" class="btn-toolbar" style="margin-right: 10px; width: 70px; display: inline;" value="Zurück">
+
+    <span class="h3" style="top: 20px; margin-top: 10px;">Einstellungen</span>
+</div>
+
+
+<div style="margin-left: 650px; margin-top: -30px; position: absolute; width: 800px;">
+    <span class="h3" style="top: 10px;">Verbundene Clients</span>
+
+    <table class="table" id="connectionList">
+        <thead>
+            <tr>
+                <th scope="col" class="text-center" style="width: 50px;">ID</th>
+                <th scope="col" class="text-center" style="width: 50px;">IP</th>
+                <th scope="col" class="text-center" style="width: 50px;">Zeit</th>
+            </tr>
+        </thead>
+        <tbody id="listColumns">
+            @foreach (var connection in Model.EventService.Connections)
+            {
+<tr id="tr_signalr_@connection.ConnectionId">
+    <td>@connection.ConnectionId</td>
+    <td>@connection.IpAddress</td>
+    <td id="td_since_@connection.ConnectionId">@connection.ConnectedSince.ToString("dd.MM.yyyy HH:mm:ss")</td>
+</tr>            }
+        </tbody>
+    </table>
+</div>
+
+<div style="margin-left: 70px; margin-top: 20px;">
+    <div class="inputContainer">
+        Hostnamen anzeigen
+        <span class="inputField" title="show_hostname">
+            <input id="show_hostname" type="checkbox" value="@Model.Configuration.ShowHostname" checked="@Model.Configuration.ShowHostname" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        Port anzeigen
+        <span class="inputField" title="show_port">
+            <input id="show_port" type="checkbox" value="@Model.Configuration.ShowPort" checked="@Model.Configuration.ShowPort" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        Interval anzeigen
+        <span class="inputField" title="show_interval">
+            <input id="show_interval" type="checkbox" value="@Model.Configuration.ShowInterval" checked="@Model.Configuration.ShowInterval" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        CPU Last anzeigen
+        <span class="inputField" title="cpu_load">
+            <input id="cpu_load" type="checkbox" value="@Model.Configuration.ShowCPULoad" checked="@Model.Configuration.ShowCPULoad" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        CPU Temperatur anzeigen
+        <span class="inputField" title="cpu_temp">
+            <input id="cpu_temp" type="checkbox" value="@Model.Configuration.ShowCPUTemp" checked="@Model.Configuration.ShowCPUTemp" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        GPU Last anzeigen
+        <span class="inputField" title="gpu_load">
+            <input id="gpu_load" type="checkbox" value="@Model.Configuration.ShowGPULoad" checked="@Model.Configuration.ShowGPULoad" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        GPU Temperatur anzeigen
+        <span class="inputField" title="gpu_temp">
+            <input id="gpu_temp" type="checkbox" value="@Model.Configuration.ShowGPUTemp" checked="@Model.Configuration.ShowGPUTemp" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        Daten an IoBroker senden
+        <span class="inputField" title="useIoBroker">
+            <input id="useriobroker" type="checkbox" value="@Model.Configuration.UseIoBroker" checked="@Model.Configuration.UseIoBroker" />
+        </span>
+    </div>
+
+    <div id="iobroker_settings" hidden="true" style="margin-left: 20px;">
+        <div class="inputContainer">
+            IoBroker Hostname
+            <span class="inputField" title="useIoBroker">
+                <input id="iobroker_hostname" type="text" value="@(string.IsNullOrEmpty(Model.Configuration.IoBrokerHostname) ? "192.168.178.xx" : Model.Configuration.IoBrokerHostname)" />
+            </span>
+        </div>
+
+        <div class="inputContainer"style="margin-bottom: 20px;">
+            IoBroker port
+            <span class="inputField" title="useIoBroker">
+                <input id="iobroker_port" type="number" min="1" max="65556" value="@(Model.Configuration.IoBrokerPort == 0 ? 8093 : Model.Configuration.IoBrokerPort)" />
+            </span>
+        </div>
+        
+        <span style="margin-bottom: 20px;"><h5>Daten die an IoBroker gesendet werden sollen:</h5></span>
+        
+        <div style="display: flex; margin-top: 20px; flex-direction: row; gap: 30px;" >
+            @foreach (var stateTypeGroup in Model.Configuration.IoBrokerStates.GroupBy(a=>a.StateType.ToString().Split('_')[0]))
+            {
+                <div>
+                    <h6>@stateTypeGroup.Key</h6>
+                    @foreach (var stateType in stateTypeGroup)
+                    {
+                        <div>
+                            <span title="iobroker_statetype_@stateType.StateType">
+                                <input class="stateTypeInput" id="@stateType.StateType" type="checkbox" value="@stateType.StateType" checked="@stateType.Enabled" />
+                            </span>
+                            <span style="margin-left: 10px;">@stateType.StateType.ToString().Split('_')[1]</span>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <span id="requestResult" style="margin-top: 10px; position: absolute;" class="h5">
+    </span>
+    <span>
+        <input id="btnSave" type="button" class="btn-toolbar" value="Speichern" style="position: absolute; left: 505px; margin-top: 10px; display: inline" />
+    </span>
+</div>
+
+
+
+
+
+<script src="lib/datatables.min.js"></script>
+<script src="lib/jquery-confirm.min.js"></script>
+<link rel="stylesheet" href="css/datatables.min.css">
+<link rel="stylesheet" href="css/jquery-confirm.min.css">
+
+<script>
+    $(document).ready(function () {
+
+        Window.connectionTable = $('#connectionList').DataTable({
+            "language": {
+                "lengthMenu": " _MENU_ Einträge pro Seite",
+                "zeroRecords": "Keine Einträge",
+                "info": "Seite _PAGE_ von _PAGES_",
+                "infoEmpty": "Keine Einträge",
+                "infoFiltered": "(Gefiltert aus _MAX_ Einträgen)",
+                "search": "Filter",
+                "emptyTable": "Keine Einträge",
+                "paginate": {
+                    "first": "<<",
+                    "last": ">>",
+                    "next": ">",
+                    "previous": "<"
+                }
+            }
+        });
+
+
+        $('#btnSettings').hide();
+
+        if ($('#useriobroker').is(':checked')) {
+            $('#iobroker_settings').attr('hidden', false);
+        }
+
+        $('#useriobroker').on('change', function () {
+            if ($('#useriobroker').is(':checked')) {
+                $('#iobroker_settings').attr('hidden', false);
+            } else {
+                $('#iobroker_settings').attr('hidden', true);
+            }
+        });
+
+        function Back() {
+            $('#btnSettings').show();
+            $.get("Index?handler=List", function (data) {
+                $("#content").html(data);
+            })
+                .fail(function () {
+                    $("#content").html("Failed to load list");
+                });
+        }
+
+        $("#btn_back").click(function () {
+            Back();
+        });
+
+        $('#btnSave').click(function () {
+            SetInputDisabled(true);
+
+            var obj = {};
+            obj.showHostname = $('#show_hostname').is(':checked');
+            obj.showPort = $('#show_port').is(':checked');
+            obj.showInterval = $('#show_interval').is(':checked');
+            obj.showCPULoad = $('#cpu_load').is(':checked');
+            obj.showCPUTemp = $('#cpu_temp').is(':checked');
+            obj.showGPULoad = $('#gpu_load').is(':checked');
+            obj.showGPUTemp = $('#gpu_temp').is(':checked');
+            obj.useIoBroker = $('#useriobroker').is(':checked');
+            obj.ioBrokerHostname = $('#iobroker_hostname').val();
+            obj.ioBrokerPort = $('#iobroker_port').val();
+            obj.ioBrokerStates = [];
+
+
+            $(".stateTypeInput").each(function() {
+                var stateTypeObj = {};
+                stateTypeObj.stateType = $(this).val();
+                stateTypeObj.enabled = $(this).is(":checked");
+                obj.ioBrokerStates.push(stateTypeObj);
+            });
+
+            var req = $.ajax({
+                url: "/configuration",
+                type: "POST",
+                data: JSON.stringify(obj),
+                contentType: "application/json; charset=utf-8"
+            });
+
+            req.done(function () {
+                $('#requestResult').html("Gespeichert!");
+                $('#requestResult').css('color', 'green');
+                setTimeout(Back(), 5000);
+            });
+            req.fail(function () {
+                $('#requestResult').html("Fehler!");
+                $('#requestResult').css('color', 'red');
+                SetInputDisabled(false);
+            });
+
+
+            function SetInputDisabled(state) {
+                $('#show_hostname').prop('disabled', state);
+                $('#show_interval').prop('disabled', state);
+                $('#show_port').prop('disabled', state);
+                $('#btnSave').prop('disabled', state);
+                $('#cpu_load').prop('disabled', state);
+                $('#cpu_temp').prop('disabled', state);
+                $('#gpu_load').prop('disabled', state);
+                $('#gpu_temp').prop('disabled', state);
+                $('#useriobroker').prop('disabled', state);
+                $('#iobroker_hostname').prop('disabled', state);
+                $('#iobroker_port').prop('disabled', state);
+            }
+        });
+    });
+</script>

@@ -1,0 +1,249 @@
+﻿@using RestSharp
+@using System.Net
+@using Microsoft.AspNetCore.Mvc.ApplicationParts
+@using Newtonsoft.Json
+@model EditViewViewComponentModel
+
+
+<div class="h-100">
+    <input id="btn_back" type="button" class="btn-toolbar" style="margin-right: 10px; width: 70px; display: inline;" value="Zurück">
+    @if (!Model.Creating)
+    {
+<span class="h3" style="top: 10px;">Bearbeiten von '@Model.ServerService.Server.Name'</span> }
+            else
+            {
+<span class="h3" style="top: 10px;">Neuen Server hinzufügen</span>}
+</div>
+
+@if (!Model.Creating)
+{
+<div style="margin-left: 900px; margin-top: 10px; position: absolute;">
+    <div class="inputContainer">
+        Status
+        <span class="inputFieldNext">
+            <input id="status" type="text" value="@Model.ServerService.State" disabled="" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        Letzter Erfolg
+        <span class="inputFieldNext">
+            <input id="lastSuccess" type="text" value="@(Model.ServerService.Server.LastSuccess == DateTime.MinValue ? "Nie" : Model.ServerService.Server.LastSuccess.ToString())" disabled="" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        Letzter Fehlschlag
+        <span class="inputFieldNext">
+            <input id="lastFailure" type="text" value="@(Model.ServerService.Server.LastFailure == DateTime.MinValue ? "Nie" : Model.ServerService.Server.LastFailure.ToString())" disabled="" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        CPU Load
+        <span class="inputFieldNext">
+            <input id="cpuLoad" type="text" value="@(Model.ServerService.CpuLoad)" disabled="" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        CPU Temp
+        <span class="inputFieldNext">
+            <input id="cpuTemp" type="text" value="@(Model.ServerService.CpuTemp)" disabled="" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        GPU Load
+        <span class="inputFieldNext">
+            <input id="gpuLoad" type="text" value="@(Model.ServerService.GpuLoad)" disabled="" />
+        </span>
+    </div>
+
+    <div class="inputContainer">
+        GPU Temp
+        <span class="inputFieldNext">
+            <input id="gpuTemp" type="text" value="@(Model.ServerService.GpuTemp)" disabled="" />
+        </span>
+    </div>
+</div>}
+<div style="margin-left: 70px; margin-top: 10px;">
+    @if (!Model.Creating)
+    {
+<div class="inputContainer">
+    ID
+    <span class="inputField" title="@Model.ServerService.Server.Id">
+        <input id="id" type="text" value="@Model.ServerService.Server.Id)" disabled="" />
+    </span>
+</div>}
+    <div class="inputContainer">
+        Name
+        <span class="inputField">
+            <input id="name" type="text" value="@Model.ServerService.Server.Name" />
+        </span>
+        <span class="errorForField" id="name_error"></span>
+    </div>
+    <div class="inputContainer">
+        Host
+        <span class="inputField">
+            <input id="hostname" type="text" value="@Model.ServerService.Server.Hostname" />
+        </span>
+        <span class="errorForField" id="host_error"></span>
+    </div>
+    <div class="inputContainer">
+        Port
+        <span class="inputField">
+            <input id="port" type="number" value="@(Model.ServerService == null ? 80 : Model.ServerService.Server.Port)" />
+        </span>
+        <span class="errorForField" id="port_error"></span>
+    </div>
+    <div class="inputContainer">
+        Intervall (Sekunden)
+        <span class="inputField">
+            <input style="width: 190px;" id="interval" type="number" value="@(Model.ServerService == null ? 30 : (Model.ServerService.Server.Interval / 1000))" />
+        </span>
+        <span class="errorForField" id="interval_error"></span>
+    </div>
+
+    <span id="requestResult" style="margin-top: 10px; position: absolute;" class="h5">
+    </span>
+    <span>
+        <input id="btnSave" type="button" class="btn-toolbar" value="@(Model.Creating ? "Hinzufügen":"Speichern")" style="position: absolute; left: 505px; margin-top: 10px; display: inline" />
+    </span>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var creating = @Json.Serialize(Model.Creating);
+        if (creating) {
+            Validate();
+        }
+
+        $("#name").on('input',
+            function() {
+                if ($("#name").val().length < 1) {
+                    $('#name_error').html("Der Name darf nicht leer sein!");
+                } else {
+                    $('#name_error').html('');
+                }
+                Validate();
+            });
+
+        $("#hostname").on('input',
+            function() {
+                if ($("#hostname").val().length < 1) {
+                    $('#host_error').html("Der Hostname darf nicht leer sein!");
+                } else {
+                    $('#host_error').html('');
+                }
+                Validate();
+            });
+
+        $("#port").on('input',
+            function() {
+                if ($("#port").val() < 1 || $("#port").val() > 65565) {
+                    $('#port_error').html("Der Port muss zwischen 1 und 65565 liegen!");
+                } else {
+                    $('#port_error').html('');
+                }
+                Validate();
+            });
+
+        $("#interval").on('input',
+            function() {
+                if ($("#interval").val() < 1 || $("#interval").val() > 600) {
+                    $('#interval_error').html("Der Intervall muss zwischen 1 und 600 Sekunden liegen!");
+                } else {
+                    $('#interval_error').html('');
+                }
+                Validate();
+            });
+
+        function Back() {
+            $.get("Index?handler=List", function (data) {
+                $("#content").html(data);
+            })
+                .fail(function () {
+                    $("#content").html("Failed to load list");
+                });
+        }
+
+        $('#btnSave').click(function() {
+            $('#btnSave').prop('disabled', true);
+            $('#name').prop('disabled', true);
+            $('#hostname').prop('disabled', true);
+            $('#port').prop('disabled', true);
+            $('#interval').prop('disabled', true);
+
+            var obj = {};
+            obj.id = '@Model.ServerService.Server.Id';
+            obj.name = $('#name').val();
+            obj.hostname = $('#hostname').val();
+            obj.port = $('#port').val();
+            obj.port = $('#port').val();
+            obj.interval = $('#interval').val() * 1000;
+
+            if (creating == false) {
+                    var req = $.ajax({
+                        url: "/server/@Model.ServerService.Server.Id",
+                        type: "POST",
+                        data: JSON.stringify(obj),
+                        contentType: "application/json; charset=utf-8"
+                    });
+                req.done(function() {
+                    $('#requestResult').html("Gespeichert!");
+                    $('#requestResult').css('color', 'green');
+                    setTimeout(Back(), 5000);
+                });
+                req.fail(function() {
+                    $('#requestResult').html("Fehler!");
+                    $('#requestResult').css('color', 'red');
+                });
+            }
+            else
+            {
+                var req2 = $.ajax({
+                    url: "/server",
+                    type: "PUT",
+                    data: JSON.stringify(obj),
+                    contentType: "application/json; charset=utf-8"
+                });
+                req2.done(function() {
+                    $('#requestResult').html("Gespeichert!");
+                    $('#requestResult').css('color', 'green');
+                });
+                req2.fail(function() {
+                    $('#requestResult').html("Fehler!");
+                    $('#requestResult').css('color', 'red');
+                });
+            }
+
+            $('#name').prop('disabled', false);
+            $('#hostname').prop('disabled', false);
+            $('#port').prop('disabled', false);
+            $('#interval').prop('disabled', false);
+
+            $('#btnSave').prop('disabled', false);
+        });
+
+        function Validate() {
+            if ($("#name").val().length >= 1
+                && $("#hostname").val().length >= 1
+                && $("#port").val() > 1
+                && $("#port").val() < 65565
+                && $("#interval").val() >= 1
+                && $("#interval").val() <= 600) {
+                $('#btnSave').prop('disabled', false);
+            } else {
+                $('#btnSave').prop('disabled', true);
+            }
+        }
+
+
+        $("#btn_back").click(function () {
+            Back();
+        });
+    });
+</script>

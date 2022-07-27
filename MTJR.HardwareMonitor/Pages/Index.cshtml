@@ -1,0 +1,143 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Hardware Monitor";
+}
+
+<div id="signalr_state" style="float: right; margin-bottom: 10px;">
+    <div class="signalr_circle" title="Verbinden..." style="background: orange; color: transparent;"></div>
+</div>
+<img id="btnSettings" src="img/settings.png" width="48" height="48" style="float: left; margin-bottom: 10px;">
+<div id="content"></div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="lib/datatables.min.js"></script>
+<script src="lib/jquery-confirm.min.js"></script>
+<link rel="stylesheet" href="css/datatables.min.css">
+<link rel="stylesheet" href="css/jquery-confirm.min.css">
+
+<script>
+    $(document).ready(function () {
+
+        $('#btnSettings').on('click', function () {
+            $.get("Index?handler=Settings", function (data) {
+                $("#content").html(data);
+            })
+                .fail(function () {
+                    $("#content").html("Failed to load edit view");
+                });
+        });
+
+        $.get("Index?handler=List", function (data) {
+            $("#content").html(data);
+        })
+            .fail(function () {
+                $("#content").html("Failed to load list");
+            });
+
+        var connection = new signalR
+            .HubConnectionBuilder()
+            .withUrl("/events")
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("updated", function (user, message) {
+            $('#name_' + user.id).html(user.name);
+            $('#hostname_' + user.id).html(user.hostname);
+            $('#port_' + user.id).html(user.port);
+            $('#interval_' + user.id).html(user.interval / 1000 + " s");
+
+
+            $('#lastFailure').val(new Date(user.lastFailure).toLocaleString("de-de"));
+            $('#lastSuccess').val(new Date(user.lastSuccess).toLocaleString("de-de"));
+
+        });
+
+        connection.on("added", function (user, message) {
+            $.get("Index?handler=List", function (data) {
+                $("#content").html(data);
+            })
+                .fail(function () {
+                    $("#content").html("Failed to load list");
+                });
+        });
+
+        connection.on("state", function (user, message) {
+            if (user.state == "Online") {
+                $('#state_' + user.id).html("<div class=\"circle\" style=\"background: green; color: transparent;\" title=\"" + user.state + "\">" + user.state + "</div>");
+            } else {
+                $('#state_' + user.id).html("<div class=\"circle\" style=\"background: red; color: transparent;\" title=\"" + user.state + "\">" + user.state + "</div>");
+            }
+        });
+
+        connection.on("ohmstate", function (user, message) {
+            if (user.state == "Online") {
+                $('#ohmstate_' + user.id).html("<div class=\"circle\" style=\"background: green; color: transparent;\" title=\"" + user.state + "\">" + user.state + "</div>");
+            } else {
+                $('#ohmstate_' + user.id).html("<div class=\"circle\" style=\"background: red; color: transparent;\" title=\"" + user.state + "\">" + user.state + "</div>");
+            }
+        });
+
+        connection.on("cpu_load", function (user, message) {
+            $('#cpu_load_' + user.id).html(user.value);
+            $('#cpuLoad').val(user.value);
+        });
+
+        connection.on("cpu_temp", function (user, message) {
+            $('#cpu_temp_' + user.id).html(user.value);
+            $('#cpuTemp').val(user.value);
+        });
+
+        connection.on("gpu_load", function (user, message) {
+            $('#gpu_load_' + user.id).html(user.value);
+            $('#gpuLoad').val(user.value);
+        });
+
+        connection.on("gpu_temp", function (user, message) {
+            $('#gpu_temp_' + user.id).html(user.value);
+            $('#gpuTemp').val(user.value);
+        });
+
+        connection.on("deleted", function (user, message) {
+            $('#tr_' + user).remove();
+        });
+
+        connection.on("signalr_disconnected", function (user, message) {
+            console.log("signalr disconnected: " + user.connectionId);
+            Window.connectionTable.row('#tr_signalr_' + user.connectionId).remove().draw(false);
+        });
+
+        connection.on("signalr_connected", function (user, message) {
+            console.log("signalr connected: " + user.connectionId);
+            if ($('#tr_signalr_' + user.connectionId).length === 0) {
+                console.log("signalr connected add: " + JSON.stringify(user));
+                Window.connectionTable.row.add([user.connectionId, user.ipAddress, new Date(user.connectedSince).toLocaleString("de-de")]).node().id = "tr_signalr_" + user.connectionId;
+                Window.connectionTable.draw(false);
+            } else {
+                console.log("signalr connected update: " + user.connectionId);
+                $('td_since_' + user.connectionId).html(new Date(user.connectedSince).toLocaleString("de-de"));
+            }
+        });
+
+        connection.onreconnecting(error => {
+            $('#signalr_state').html("<div class=\"signalr_circle\" title=\"Neu verbinden\" style=\"background: orange; color: transparent;\"</div>");
+        });
+
+        connection.onreconnected(connectionId => {
+            $('#signalr_state').html("<div class=\"signalr_circle\" title=\"Verbunden\" style=\"background: green; color: transparent;\"</div>");
+        });
+
+        connection.onclose(error => {
+            $('#signalr_state').html("<div class=\"signalr_circle\"  title=\"Verbindung geschlossen\" style=\"background: red; color: transparent;\"</div>");
+        });
+
+        connection.start().then(function () {
+            $('#signalr_state').html("<div class=\"signalr_circle\" title=\"Verbunden\" style=\"background: green; color: transparent;\"</div>");
+        }).catch(function (err) {
+            console.error("disconnected: '" + err.toString() + "'");
+            $('#signalr_state').html("<div class=\"signalr_circle\" title=\"Verbindung fehlgeschlagen\" style=\"background: red; color: transparent;\"</div>");
+        });
+    });
+
+</script>
