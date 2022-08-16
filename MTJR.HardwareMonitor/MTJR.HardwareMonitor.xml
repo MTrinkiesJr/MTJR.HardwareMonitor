@@ -152,11 +152,13 @@
             API Controller for get or update <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/>
             </summary>
         </member>
-        <member name="M:MTJR.HardwareMonitor.Controller.ConfigurationController.#ctor(MTJR.HardwareMonitor.Services.ConfigurationService)">
+        <member name="M:MTJR.HardwareMonitor.Controller.ConfigurationController.#ctor(MTJR.HardwareMonitor.Services.ConfigurationService,MTJR.HardwareMonitor.Services.IoBrokerApiService,MTJR.HardwareMonitor.Services.MonitoringService)">
             <summary>
             Constructor to create fulfilled <see cref="T:MTJR.HardwareMonitor.Controller.ConfigurationController"/>
             </summary>
             <param name="configurationService">The configuration service to control the <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/> at runtime injected via dependency injection</param>
+            <param name="ioBrokerApi">The <see cref="T:MTJR.HardwareMonitor.Services.IoBrokerApiService"/> to manage IoBroker</param>
+            <param name="monitoringService"><see cref="T:MTJR.HardwareMonitor.Services.MonitoringService"/> to get server information</param>
         </member>
         <member name="M:MTJR.HardwareMonitor.Controller.ConfigurationController.GetConfiguration">
             <summary>
@@ -169,6 +171,12 @@
             Updates the current configuration with given <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/>
             </summary>
             <param name="configuration">The configuration fulfilled, the <see cref="P:MTJR.HardwareMonitor.Configuration.GuiConfiguration.Id"/> can be empty</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Controller.ConfigurationController.ImportJarvisDevices">
+            <summary>
+            Imports devices into jarvis devices list
+            </summary>
             <returns></returns>
         </member>
         <member name="T:MTJR.HardwareMonitor.Controller.ServerController">
@@ -470,6 +478,13 @@
             Some <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ImageUrl"/> of value 'HardwareType.Transparent/> inherit the <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> from <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Parent"/> 
             </summary>
         </member>
+        <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.SubHardwareType">
+            <summary>
+            Resolved <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> by <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ImageUrl"/>
+            Some <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ImageUrl"/> of value 'HardwareType.Transparent/> inherit the <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> from <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.Parent"/>
+            SubType is only set when <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.HardwareType"/> is <see cref="F:MTJR.HardwareMonitor.Model.HardwareType.Gpu"/> to the correct GPu vendor
+            </summary>
+        </member>
         <member name="P:MTJR.HardwareMonitor.Model.HardwareInfo.ValueType">
             <summary>
             Resolved <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ValueType"/> by <see cref="P:MTJR.HardwareMonitor.Model.HardwareInfo.ImageUrl"/>
@@ -564,7 +579,17 @@
         </member>
         <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Nvidia">
             <summary>
-            Defines a GPU, nvidia graphics card in specific
+            Defines a GPU, NVIDIA graphics card in specific used as SubType
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Amd">
+            <summary>
+            Defines a GPU, AMD graphics card in specific used as SubType
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Gpu">
+            <summary>
+            Defines a GPU
             </summary>
         </member>
         <member name="F:MTJR.HardwareMonitor.Model.HardwareType.Hdd">
@@ -662,6 +687,126 @@
             Defines if the value ich acknowledged
             </summary>
         </member>
+        <member name="T:MTJR.HardwareMonitor.Model.JarvisDevice">
+            <summary>
+            Describes a Jarvis device
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDevice.Name">
+            <summary>
+            The name of the device
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDevice.Icon">
+            <summary>
+            The icon of the device from https://icon-sets.iconify.design/mdi/
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDevice.Label">
+            <summary>
+            The devices name
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDevice.Function">
+            <summary>
+            The category in jarvis
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDevice.States">
+            <summary>
+            Defines states for this device
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDevice.Options">
+            <summary>
+            Options for Jarvis device
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDevice.Attributes">
+            <summary>
+            Attributes for Jarvis device
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.JarvisDevices">
+            <summary>
+            List of <see cref="T:MTJR.HardwareMonitor.Model.JarvisDevice"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDevices.Version">
+            <summary>
+            Version of Jarvis
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDevices.Devices">
+            <summary>
+            List of <see cref="P:MTJR.HardwareMonitor.Model.JarvisDevices.Devices"/>
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.JarvisDeviceState">
+            <summary>
+            Describes a state for <see cref="T:MTJR.HardwareMonitor.Model.JarvisDevice"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDeviceState.State">
+            <summary>
+            The state key in IoBroker
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDeviceState.StateKey">
+            <summary>
+            The separate key if the <see cref="P:MTJR.HardwareMonitor.Model.JarvisDeviceState.State"/>
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDeviceState.Action">
+            <summary>
+            The action state to trigger to change
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDeviceState.ShowState">
+            <summary>
+            Show this state
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDeviceState.Label">
+            <summary>
+            Label for this state
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDeviceState.ActionElement">
+            <summary>
+            The displayed element to show for the state value
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDeviceState.BodyElement">
+            <summary>
+            The displayed element to show for the body value
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDeviceState.Unit">
+            <summary>
+            The unit of the states valie
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisDeviceState.Hide">
+            <summary>
+            Hides this state
+            </summary>
+        </member>
+        <member name="T:MTJR.HardwareMonitor.Model.JarvisManufacturer">
+            <summary>
+            Describes a Jarvis attribute
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisManufacturer.Name">
+            <summary>
+            The manufacturer name
+            </summary>
+        </member>
+        <member name="P:MTJR.HardwareMonitor.Model.JarvisManufacturer.Namespace">
+            <summary>
+            The manufacturer namespace
+            </summary>
+        </member>
         <member name="T:MTJR.HardwareMonitor.Model.Server">
             <summary>
             Describes a server which is running Open Hardware Monitor
@@ -736,6 +881,11 @@
         <member name="F:MTJR.HardwareMonitor.Model.ValueType.Load">
             <summary>
             Defines a load
+            </summary>
+        </member>
+        <member name="F:MTJR.HardwareMonitor.Model.ValueType.Data">
+            <summary>
+            Defines data
             </summary>
         </member>
         <member name="F:MTJR.HardwareMonitor.Model.ValueType.Power">
@@ -1078,11 +1228,6 @@
             Loads of the GPU
             </summary>
         </member>
-        <member name="F:MTJR.HardwareMonitor.Services.StateType.GPU_Data">
-            <summary>
-            Datas of the GPU
-            </summary>
-        </member>
         <member name="F:MTJR.HardwareMonitor.Services.StateType.GPU_Temperature">
             <summary>
             Temperatures of the GPU
@@ -1093,7 +1238,7 @@
             Load of the memory
             </summary>
         </member>
-        <member name="F:MTJR.HardwareMonitor.Services.StateType.RAM_Data">
+        <member name="F:MTJR.HardwareMonitor.Services.StateType.RAM_Power">
             <summary>
             Data of the memory
             </summary>
@@ -1126,16 +1271,15 @@
             </summary>
             <param name="configurationService"><see cref="T:MTJR.HardwareMonitor.Services.ConfigurationService"/> to get the current <see cref="T:MTJR.HardwareMonitor.Configuration.GuiConfiguration"/></param>
         </member>
-        <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.UpdateStatesAsync(System.String,System.String,MTJR.HardwareMonitor.Model.HardwareInfo)">
+        <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.UpdateStatesAsync(MTJR.HardwareMonitor.Services.ServerMonitoringService,MTJR.HardwareMonitor.Model.HardwareInfo)">
             <summary>
             Update all states for a <see cref="T:MTJR.HardwareMonitor.Model.Server"/>
             </summary>
-            <param name="itemId">The server id</param>
-            <param name="itemName">The server name</param>
+            <param name="serverService">The <see cref="T:MTJR.HardwareMonitor.Services.ServerMonitoringService"/> to update the states for</param>
             <param name="info">The current <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/> of the <see cref="T:MTJR.HardwareMonitor.Model.Server"/></param>
             <returns></returns>
         </member>
-        <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.CreateObjectAsync(System.String,System.String,System.String,System.String)">
+        <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.CreateObjectAsync(System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Ensures the base path of an <see cref="T:MTJR.HardwareMonitor.Model.Server"/>
             all server instances will be created at "0_userdata.0.HardwareMonitor"
@@ -1144,6 +1288,7 @@
             <param name="itemName">The name of the <see cref="T:MTJR.HardwareMonitor.Model.Server"/></param>
             <param name="objectType">The type of the added object</param>
             <param name="valueType">The type of the state value</param>
+            <param name="unit">The optional unit of the state</param>
             <returns></returns>
         </member>
         <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.AddStatesAsync(System.String,System.String,System.Collections.Generic.List{MTJR.HardwareMonitor.Model.HardwareInfo},MTJR.HardwareMonitor.Services.StateType)">
@@ -1154,6 +1299,13 @@
             <param name="serverName">The <see cref="T:MTJR.HardwareMonitor.Model.Server"/> name</param>
             <param name="infos">The resolved <inheritdoc cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/> list of given <see cref="T:MTJR.HardwareMonitor.Services.StateType"/></param>
             <param name="stateType">The <see cref="T:MTJR.HardwareMonitor.Services.StateType"/> for resolved <see cref="T:MTJR.HardwareMonitor.Model.HardwareInfo"/>'s</param>
+            <returns></returns>
+        </member>
+        <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.ImportJarvisDevices(System.Collections.Generic.List{MTJR.HardwareMonitor.Services.ServerMonitoringService})">
+            <summary>
+            Patches the device for all server and states to Jarvis
+            </summary>
+            <param name="serverList">List of all servers</param>
             <returns></returns>
         </member>
         <member name="M:MTJR.HardwareMonitor.Services.IoBrokerApiService.UpdateStateAsync(System.String,System.Object)">
@@ -1296,7 +1448,6 @@
             <summary>
             Send event for current <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.CpuLoad"/>, <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.CpuTemp"/>, <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.GpuLoad"/> and <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.GpuTemp"/>
             </summary>
-            <param name="name">The name of the <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.HardwareInfo"/></param>
             <param name="eventName">The name of the event to send</param>
             <param name="hardwareType">The <see cref="T:MTJR.HardwareMonitor.Model.HardwareType"/> to find the correct <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.HardwareInfo"/></param>
             <param name="valueType">The <see cref="T:MTJR.HardwareMonitor.Model.ValueType"/> to find the correct <see cref="P:MTJR.HardwareMonitor.Services.ServerMonitoringService.HardwareInfo"/></param>

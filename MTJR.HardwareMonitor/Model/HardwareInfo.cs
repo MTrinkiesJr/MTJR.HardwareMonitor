@@ -100,6 +100,13 @@ namespace MTJR.HardwareMonitor.Model
         [JsonIgnore] public HardwareType HardwareType => ImageUrl.GetHardwareType(Parent);
 
         /// <summary>
+        /// Resolved <see cref="HardwareType"/> by <see cref="ImageUrl"/>
+        /// Some <see cref="ImageUrl"/> of value 'HardwareType.Transparent/> inherit the <see cref="HardwareType"/> from <see cref="Parent"/>
+        /// SubType is only set when <see cref="HardwareType"/> is <see cref="HardwareType.Gpu"/> to the correct GPu vendor
+        /// </summary>
+        [JsonIgnore] public HardwareType SubHardwareType => HardwareType == HardwareType.Gpu ? ResolveSubType() : HardwareType.None;
+
+        /// <summary>
         /// Resolved <see cref="ValueType"/> by <see cref="ImageUrl"/>
         /// Some <see cref="ImageUrl"/> of value 'HardwareType.Transparent/> inherit the <see cref="HardwareType"/> from <see cref="Parent"/> 
         /// </summary>
@@ -280,6 +287,24 @@ namespace MTJR.HardwareMonitor.Model
             }
 
             return results;
+        }
+
+        private HardwareType ResolveSubType()
+        {
+            var imageName = "";
+            if (!string.IsNullOrEmpty(ImageUrl))
+            {
+                imageName = ImageUrl.ToLower().Split('/')[1];
+            }
+            switch (imageName)
+            {
+                case "nvidia.png":
+                    return HardwareType.Nvidia;
+                case "amd.png":
+                    return HardwareType.Amd;
+                default:
+                    return HardwareType.None;
+            }
         }
     }
 }
