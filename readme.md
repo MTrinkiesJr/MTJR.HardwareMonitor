@@ -1,4 +1,6 @@
 ## Monitoring Service
+For english version, see [here](https://github.com/MTrinkiesJr/MTJR.HardwareMonitor/blob/master/readme_en.md)
+
 | | |
 |--|--|
 Service | [![Build Status](https://dev.azure.com/mtrinkies/MTJR/_apis/build/status/MTrinkiesJr.MTJR.HardwareMonitor?branchName=master)](https://dev.azure.com/mtrinkies/MTJR/_build/latest?definitionId=57&branchName=master)|
