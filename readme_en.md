@@ -119,15 +119,48 @@ Zum starten folgendes Kommando ausführen:
 docker run -d --name HardwareMonitor -p 5000:5000 -e HardwareMonitorConfiguration__DatabaseConnectionString=Server={ServerIP oder Hostname};Port={Postgres Port (5432)};Database={Datenbankname};User Id={Benutzername};Password={Passwort} mtjr/hardwaremonitor
 ```
 
-~~Additionally the repo contains a docker compose file which cann by startet by:~~
+Additionally the repo contains a docker compose file:
+```
+version: '2'
+services:
+  postgres:
+    image: postgres:12.4
+    hostname: postgres
+    container_name: postgres
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: hardwaremonitor
+      POSTGRES_USER: admin
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  hardwaremonitor:
+    container_name: hardwaremonitor
+    hostname: hardwaremonitor
+    image: mtjr/hardwaremonitor
+    restart: always
+    ports:
+      - "5000:5000"
+    links:
+      - postgres
+    environment: 
+      - ASPNETCORE_URLS=http://*:5000     
+      - HardwareMonitorConfiguration__DatabaseConnectionString=Server=postgres;Port=5432;Database=hardwaremonitor;User Id=admin;Password=hardwaremonitor 
+
+volumes:
+  postgres:      
+```
+
+which can by started by:
+
 ```
 docker compose up -d 
 ```
-~~which start PostgreSQL and the service~~
-**In progress**
+which start PostgreSQL and the service
 
 ### ToDo
-- Docker Compose
 - Only data from NVIDIA GPUs supported at the moment
 
 ### Hints
