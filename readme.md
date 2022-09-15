@@ -106,17 +106,48 @@ Zum starten folgendes Kommando ausführen:
 ```
 docker run -d --name HardwareMonitor -p 5000:5000 -e HardwareMonitorConfiguration__DatabaseConnectionString=Server={ServerIP oder Hostname};Port={Postgres Port (5432)};Database={Datenbankname};User Id={Benutzername};Password={Passwort} mtjr/hardwaremonitor
 ```
-~~Zusätlich beinhaltet das Repo eine Docker Compose Datei welche, mit dem Befehl~~
+Zusätlich beinhaltet das Repo eine Docker Compose Datei:
+```
+version: '2'
+services:
+  postgres:
+    image: postgres:12.4
+    hostname: postgres
+    container_name: postgres
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: hardwaremonitor
+      POSTGRES_USER: admin
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  hardwaremonitor:
+    container_name: hardwaremonitor
+    hostname: hardwaremonitor
+    image: mtjr/hardwaremonitor
+    restart: always
+    ports:
+      - "5000:5000"
+    links:
+      - postgres
+    environment: 
+      - ASPNETCORE_URLS=http://*:5000     
+      - HardwareMonitorConfiguration__DatabaseConnectionString=Server=postgres;Port=5432;Database=hardwaremonitor;User Id=admin;Password=hardwaremonitor 
+
+volumes:
+  postgres:      
+```
+
+welche, mit dem Befehl
+
 ```
 docker compose up -d 
 ```
-~~den Service sowie PostgreSQL startet~~
-
-**In Arbeit**
-
+den Service sowie PostgreSQL startet
 
 ### ToDo
-- Docker Compose
 - Im Moment werden nur GPU Daten von NVIDIA Grafikkarten ausgelesen, in Zukunft sollen alle unterstützt werden
 - Bei mehr als einer Grafikkarte wird in IoBroker nur eine angezeigt. Dies wird in Zukunft optional als JSON Tabelle in IoBroker angelegt
 

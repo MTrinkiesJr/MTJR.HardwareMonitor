@@ -26,7 +26,7 @@
     <td>@connection.ConnectionId</td>
     <td>@connection.IpAddress</td>
     <td id="td_since_@connection.ConnectionId">@connection.ConnectedSince.ToString("dd.MM.yyyy HH:mm:ss")</td>
-</tr>            }
+</tr>}
         </tbody>
     </table>
 </div>
@@ -96,32 +96,31 @@
             </span>
         </div>
 
-        <div class="inputContainer"style="margin-bottom: 20px;">
+        <div class="inputContainer" style="margin-bottom: 20px;">
             IoBroker port
             <span class="inputField" title="useIoBroker">
                 <input id="iobroker_port" type="number" min="1" max="65556" value="@(Model.Configuration.IoBrokerPort == 0 ? 8093 : Model.Configuration.IoBrokerPort)" />
             </span>
         </div>
-        
+
         <span style="margin-bottom: 20px;"><h5>Daten die an IoBroker gesendet werden sollen:</h5></span>
-        
-        <div style="display: flex; margin-top: 20px; flex-direction: row; gap: 30px;" >
-            @foreach (var stateTypeGroup in Model.Configuration.IoBrokerStates.GroupBy(a=>a.StateType.ToString().Split('_')[0]))
+
+        <div style="display: flex; margin-top: 20px; flex-direction: row; gap: 30px;">
+            @foreach (var stateTypeGroup in Model.Configuration.IoBrokerStates.GroupBy(a => a.StateType.ToString().Split('_')[0]))
             {
-                <div>
-                    <h6>@stateTypeGroup.Key</h6>
-                    @foreach (var stateType in stateTypeGroup)
-                    {
-                        <div>
-                            <span title="iobroker_statetype_@stateType.StateType">
-                                <input class="stateTypeInput" id="@stateType.StateType" type="checkbox" value="@stateType.StateType" checked="@stateType.Enabled" />
-                            </span>
-                            <span style="margin-left: 10px;">@stateType.StateType.ToString().Split('_')[1]</span>
-                        </div>
-                    }
-                </div>
-            }
+    <div>
+        <h6>@stateTypeGroup.Key</h6>
+        @foreach (var stateType in stateTypeGroup)
+        {
+    <div>
+        <span title="iobroker_statetype_@stateType.StateType">
+            <input class="stateTypeInput" id="@stateType.StateType" type="checkbox" value="@stateType.StateType" checked="@stateType.Enabled" />
+        </span>
+        <span style="margin-left: 10px;">@stateType.StateType.ToString().Split('_')[1]</span>
+    </div>}
+    </div>}
         </div>
+        <input id="btnImportJarvis" type="button" class="btn-toolbar" value="Geräte in Jarvis importieren" style="position: absolute; left: 100px; margin-top: 10px; display: inline" />
     </div>
 
     <span id="requestResult" style="margin-top: 10px; position: absolute;" class="h5">
@@ -163,6 +162,24 @@
 
 
         $('#btnSettings').hide();
+
+        $('#btnImportJarvis').click(function () {
+            $('#btnImportJarvis').prop('disabled', true);
+
+            var req = $.ajax({
+                url: "/configuration/jarvis",
+                type: "POST",
+                contentType: "application/json; charset=utf-8"
+            });
+            req.done(function () {
+                alert("Geräte wurden importiert");
+            });
+            req.fail(function () {
+                alert("Fehler beim importieren der Geräte");
+            });
+
+            $('#btnImportJarvis').prop('disabled', false);
+        });
 
         if ($('#useriobroker').is(':checked')) {
             $('#iobroker_settings').attr('hidden', false);
@@ -207,7 +224,7 @@
             obj.ioBrokerStates = [];
 
 
-            $(".stateTypeInput").each(function() {
+            $(".stateTypeInput").each(function () {
                 var stateTypeObj = {};
                 stateTypeObj.stateType = $(this).val();
                 stateTypeObj.enabled = $(this).is(":checked");

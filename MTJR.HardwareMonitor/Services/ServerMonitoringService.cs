@@ -41,6 +41,7 @@ namespace MTJR.HardwareMonitor.Services
         private readonly IHubContext<EventHub> _hubContext;
         private readonly ConfigurationService _configurationService;
         private readonly IoBrokerApiService _ioBrokerApi;
+        private bool _infosLoading;
 
         /// <summary>
         /// The <see cref="Server"/> reference from <see cref="DataContext"/>
@@ -140,7 +141,10 @@ namespace MTJR.HardwareMonitor.Services
         /// <param name="e">Arguments passed to the event</param>
         private async void TimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            await GetInfoAsync();
+            if (!_infosLoading)
+            {
+                await GetInfoAsync();
+            }
         }
 
 
@@ -150,66 +154,76 @@ namespace MTJR.HardwareMonitor.Services
         /// <returns><see cref="Task"/></returns>
         private async Task GetInfoAsync()
         {
-            if (!await CheckStatusAsync())
+            if (!_infosLoading)
             {
-                State = State.Offline;
-                Server.LastFailure = DateTime.Now;
-
-                await _hubContext.Clients.All.SendCoreAsync("state", new object[] { new { id = Server.Id, state = State.ToString(), name = Server.Name } });
-
-                await Task.Run(async () => await UpdateDatabaseAsync());
-                return;
-            }
-            State = State.Online;
-
-
-            await _hubContext.Clients.All.SendCoreAsync("state", new object[] { new { id = Server.Id, state = State.ToString(), name = Server.Name } });
-            var client = new RestClient($"http://{Server.Hostname}:{Server.Port}");
-
-            var request = new RestRequest("/data.json");
-            request.Timeout = 5000;
-
-            var response = await client.ExecuteAsync(request, Method.Get);
-
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                Server.LastSuccess = DateTime.Now;
-                HardwareInfo = null;
-                if (response.Content != null)
+                _infosLoading = true;
+                if (!await CheckStatusAsync())
                 {
-                    HardwareInfo = JsonConvert.DeserializeObject<HardwareInfo>(response.Content);
+                    State = State.Offline;
+                    Server.LastFailure = DateTime.Now;
+
+                    await _hubContext.Clients.All.SendCoreAsync("state",
+                        new object[] { new { id = Server.Id, state = State.ToString(), name = Server.Name } });
+
+                    await Task.Run(async () => await UpdateDatabaseAsync());
+                    return;
                 }
 
-                HardwareInfo?.ResolveParents(Server.Id);
-                OhmState = State.Online;
+                State = State.Online;
 
-                await _hubContext.Clients.All.SendCoreAsync("ohmstate", new object[] { new { id = Server.Id, state = OhmState.ToString(), name = Server.Name } });
 
-                CpuTemp = await SendEventForHardware("cpu_temp", HardwareType.Cpu, ValueType.Temperature);
-                CpuLoad = await SendEventForHardware("cpu_load", HardwareType.Cpu, ValueType.Load);
-                GpuTemp = await SendEventForHardware("gpu_temp", HardwareType.Nvidia, ValueType.Temperature);
-                GpuLoad = await SendEventForHardware("gpu_load", HardwareType.Nvidia, ValueType.Load);
-            }
-            else
-            {
-                Server.LastFailure = DateTime.Now;
-                OhmState = State.Offline;
+                await _hubContext.Clients.All.SendCoreAsync("state",
+                    new object[] { new { id = Server.Id, state = State.ToString(), name = Server.Name } });
+                var client = new RestClient($"http://{Server.Hostname}:{Server.Port}");
 
-                await _hubContext.Clients.All.SendCoreAsync("ohmstate", new object[] { new { id = Server.Id, state = OhmState.ToString(), name = Server.Name } });
-            }
+                var request = new RestRequest("/data.json");
+                request.Timeout = 5000;
 
-            await Task.Run(async () => await UpdateDatabaseAsync());
+                var response = await client.ExecuteAsync(request, Method.Get);
 
-            if (_configurationService.GuiConfiguration.UseIoBroker)
-            {
-                await Task.Run(async () => await _ioBrokerApi.UpdateStatesAsync(Server.Id, Server.Name, HardwareInfo));
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    Server.LastSuccess = DateTime.Now;
+                    HardwareInfo = null;
+                    if (response.Content != null)
+                    {
+                        HardwareInfo = JsonConvert.DeserializeObject<HardwareInfo>(response.Content);
+                    }
+
+                    HardwareInfo?.ResolveParents(Server.Id);
+                    OhmState = State.Online;
+
+                    await _hubContext.Clients.All.SendCoreAsync("ohmstate",
+                        new object[] { new { id = Server.Id, state = OhmState.ToString(), name = Server.Name } });
+
+                    CpuTemp = await SendEventForHardware("cpu_temp", HardwareType.Cpu, ValueType.Temperature);
+                    CpuLoad = await SendEventForHardware("cpu_load", HardwareType.Cpu, ValueType.Load);
+                    GpuTemp = await SendEventForHardware("gpu_temp", HardwareType.Gpu, ValueType.Temperature);
+                    GpuLoad = await SendEventForHardware("gpu_load", HardwareType.Gpu, ValueType.Load);
+                }
+                else
+                {
+                    Server.LastFailure = DateTime.Now;
+                    OhmState = State.Offline;
+
+                    await _hubContext.Clients.All.SendCoreAsync("ohmstate",
+                        new object[] { new { id = Server.Id, state = OhmState.ToString(), name = Server.Name } });
+                }
+
+                await Task.Run(async () => await UpdateDatabaseAsync());
+
+                if (_configurationService.GuiConfiguration.UseIoBroker)
+                {
+                    await Task.Run(async () => await _ioBrokerApi.UpdateStatesAsync(this, HardwareInfo));
+                }
+
+                _infosLoading = false;
             }
         }
 
         /// <summary>
         /// Send event for current <see cref="CpuLoad"/>, <see cref="CpuTemp"/>, <see cref="GpuLoad"/> and <see cref="GpuTemp"/>
         /// </summary>
-        /// <param name="name">The name of the <see cref="HardwareInfo"/></param>
         /// <param name="eventName">The name of the event to send</param>
         /// <param name="hardwareType">The <see cref="HardwareType"/> to find the correct <see cref="HardwareInfo"/></param>
         /// <param name="valueType">The <see cref="ValueType"/> to find the correct <see cref="HardwareInfo"/></param>

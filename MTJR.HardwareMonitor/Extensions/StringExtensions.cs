@@ -43,7 +43,7 @@ namespace MTJR.HardwareMonitor.Extensions
                     hardwareType = HardwareType.Ram;
                     break;
                 case "nvidia.png":
-                    hardwareType = HardwareType.Nvidia;
+                    hardwareType = HardwareType.Gpu;
                     break;
                 case "hdd.png":
                     hardwareType = HardwareType.Hdd;

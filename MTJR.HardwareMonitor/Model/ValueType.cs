@@ -30,6 +30,10 @@
         /// </summary>
         Load,
         /// <summary>
+        /// Defines data
+        /// </summary>
+        Data,
+        /// <summary>
         /// Defines power
         /// </summary>
         Power,

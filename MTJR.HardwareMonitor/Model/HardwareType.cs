@@ -26,9 +26,17 @@
         /// </summary>
         Ram,
         /// <summary>
-        /// Defines a GPU, nvidia graphics card in specific
+        /// Defines a GPU, NVIDIA graphics card in specific used as SubType
         /// </summary>
         Nvidia,
+        /// <summary>
+        /// Defines a GPU, AMD graphics card in specific used as SubType
+        /// </summary>
+        Amd,
+        /// <summary>
+        /// Defines a GPU
+        /// </summary>
+        Gpu,
         /// <summary>
         /// Defines a HDD
         /// </summary>

@@ -84,18 +84,17 @@ namespace MTJR.HardwareMonitor.Services
                 {
                     var ioBrokerStates = new List<StateTypeConfiguration>();
 
-                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.CPU_Clock, false));
+                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.CPU_Clock, true));
                     ioBrokerStates.Add(new StateTypeConfiguration(StateType.CPU_Load, true));
-                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.CPU_Power, false));
+                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.CPU_Power, true));
                     ioBrokerStates.Add(new StateTypeConfiguration(StateType.CPU_Temperature, true));
-                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.GPU_Clock, false));
-                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.GPU_Data, false));
+                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.GPU_Clock, true));
                     ioBrokerStates.Add(new StateTypeConfiguration(StateType.GPU_Load, true));
-                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.GPU_Power, false));
+                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.GPU_Power, true));
                     ioBrokerStates.Add(new StateTypeConfiguration(StateType.GPU_Temperature, true));
-                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.RAM_Data, true));
-                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.RAM_Load, false));
-                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.HDD_Data, false));
+                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.RAM_Power, true));
+                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.RAM_Load, true));
+                    ioBrokerStates.Add(new StateTypeConfiguration(StateType.HDD_Data, true));
                     ioBrokerStates.Add(new StateTypeConfiguration(StateType.HDD_Load, true));
                     ioBrokerStates.Add(new StateTypeConfiguration(StateType.HDD_Temperature, true));
 

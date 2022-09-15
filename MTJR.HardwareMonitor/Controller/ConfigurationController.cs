@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using MTJR.HardwareMonitor.Configuration;
 using MTJR.HardwareMonitor.Services;
@@ -13,14 +14,20 @@ namespace MTJR.HardwareMonitor.Controller
     public class ConfigurationController : ControllerBase
     {
         private readonly ConfigurationService _configurationService;
+        private readonly IoBrokerApiService _ioBrokerApi;
+        private readonly MonitoringService _monitoringService;
 
         /// <summary>
         /// Constructor to create fulfilled <see cref="ConfigurationController"/>
         /// </summary>
         /// <param name="configurationService">The configuration service to control the <see cref="GuiConfiguration"/> at runtime injected via dependency injection</param>
-        public ConfigurationController(ConfigurationService configurationService)
+        /// <param name="ioBrokerApi">The <see cref="IoBrokerApiService"/> to manage IoBroker</param>
+        /// <param name="monitoringService"><see cref="MonitoringService"/> to get server information</param>
+        public ConfigurationController(ConfigurationService configurationService, IoBrokerApiService ioBrokerApi, MonitoringService monitoringService)
         {
             _configurationService = configurationService;
+            _ioBrokerApi = ioBrokerApi;
+            _monitoringService = monitoringService;
         }
 
         /// <summary>
@@ -43,6 +50,24 @@ namespace MTJR.HardwareMonitor.Controller
         public async Task<IActionResult> UpdateConfiguration(GuiConfiguration configuration)
         {
             var result = await _configurationService.UpdateAsync(configuration);
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        /// <summary>
+        /// Imports devices into jarvis devices list
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("jarvis")]
+        public async Task<IActionResult> ImportJarvisDevices()
+        {
+            var result =
+                await _ioBrokerApi.ImportJarvisDevices(_monitoringService.Servers);
 
             if (result)
             {

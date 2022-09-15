@@ -116,6 +116,8 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
+        
+        $('#btnSettings').hide();
         var creating = @Json.Serialize(Model.Creating);
         if (creating) {
             Validate();
@@ -162,8 +164,9 @@
             });
 
         function Back() {
+            $('#btnSettings').show();
             $.get("Index?handler=List", function (data) {
-                $("#content").html(data);
+                    $("#content").html(data);
             })
                 .fail(function () {
                     $("#content").html("Failed to load list");
